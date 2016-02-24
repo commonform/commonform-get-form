@@ -1,0 +1,21 @@
+{
+  "name": "commonform-get-form",
+  "description": "fetch forms from api.commonform.org",
+  "version": "0.0.0",
+  "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "dependencies": {
+    "json-parse-errback": "^2.0.0"
+  },
+  "devDependencies": {
+    "defence-cli": "^1.0.5",
+    "replace-require-self": "^1.1.1"
+  },
+  "files": [
+    "index.js"
+  ],
+  "license": "Apache-2.0",
+  "repository": "commonform/commonform-get-form",
+  "scripts": {
+    "test": "defence README.md | replace-require-self | node"
+  }
+}
