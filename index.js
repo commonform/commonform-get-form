@@ -13,39 +13,31 @@
  * permissions and limitations under the License.
  */
 
-module.exports = getForm
-
 var concat = require('simple-concat')
 var https = require('https')
 var once = require('once')
 var parse = require('json-parse-errback')
 
-function getForm (repository, digest, callback) {
+module.exports = function (repository, digest, callback) {
   callback = once(callback)
-  https.request(
-    {
-      host: repository,
-      path: '/forms/' + digest
-    },
-    function (response) {
+  https.request({
+    host: repository,
+    path: '/forms/' + digest
+  })
+    .once('error', callback)
+    .once('timeout', callback)
+    .once('response', function (response) {
       var statusCode = response.statusCode
-      if (statusCode === 404) {
-        callback(null, false)
-      } else {
-        if (statusCode === 200) {
-          concat(response, function (error, buffer) {
-            if (error) return callback(error)
-            parse(buffer, callback)
-          })
-        } else {
-          var error = new Error()
-          error.statusCode = statusCode
-          callback(error)
-        }
+      if (statusCode === 404) return callback(null, false)
+      if (statusCode !== 200) {
+        var error = new Error()
+        error.statusCode = statusCode
+        return callback(error)
       }
-    }
-  )
-  .once('error', callback)
-  .once('timeout', callback)
-  .end()
+      concat(response, function (error, buffer) {
+        if (error) return callback(error)
+        parse(buffer, callback)
+      })
+    })
+    .end()
 }
