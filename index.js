@@ -16,9 +16,11 @@
 module.exports = getForm
 
 var https = require('https')
+var once = require('once')
 var parse = require('json-parse-errback')
 
 function getForm (repository, digest, callback) {
+  callback = once(callback)
   https.request(
     {
       host: repository,
@@ -53,5 +55,7 @@ function getForm (repository, digest, callback) {
       }
     }
   )
+  .once('error', callback)
+  .once('timeout', callback)
   .end()
 }

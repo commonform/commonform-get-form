@@ -4,7 +4,8 @@
   "version": "2.0.0",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "dependencies": {
-    "json-parse-errback": "^2.0.0"
+    "json-parse-errback": "^2.0.0",
+    "once": "^1.4.0"
   },
   "devDependencies": {
     "defence-cli": "^1.0.5",
