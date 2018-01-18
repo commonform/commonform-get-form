@@ -1,7 +1,7 @@
 {
   "name": "commonform-get-form",
   "description": "fetch forms from api.commonform.org",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "dependencies": {
     "json-parse-errback": "^2.0.0",
