@@ -18,10 +18,10 @@ module.exports = getForm
 var https = require('https')
 var parse = require('json-parse-errback')
 
-function getForm (digest, callback) {
+function getForm (repository, digest, callback) {
   https.request(
     {
-      host: 'api.commonform.org',
+      host: repository,
       path: '/forms/' + digest
     },
     function (response) {

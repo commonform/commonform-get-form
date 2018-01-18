@@ -7,7 +7,7 @@ var testForm = (
   'b5bf2fd1da7bf6b7c69f95d6e2705c37'
 )
 
-getForm(testForm, function (error, form) {
+getForm('api.commonform.org', testForm, function (error, form) {
   assert.deepStrictEqual(
     form, {content: ['This is a test form.']}
   )
@@ -18,7 +18,7 @@ var nonexistent = (
   'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 )
 
-getForm(nonexistent, function (error, form) {
+getForm('api.commonform.org', nonexistent, function (error, form) {
   assert.equal(form, false)
 })
 ```
