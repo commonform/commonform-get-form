@@ -15,6 +15,7 @@
 
 module.exports = getForm
 
+var concat = require('simple-concat')
 var https = require('https')
 var once = require('once')
 var parse = require('json-parse-errback')
@@ -27,31 +28,20 @@ function getForm (repository, digest, callback) {
       path: '/forms/' + digest
     },
     function (response) {
-      var status = response.statusCode
-      if (status === 404) {
+      var statusCode = response.statusCode
+      if (statusCode === 404) {
         callback(null, false)
       } else {
-        var buffers = []
-        response
-        .on('data', function (buffer) {
-          buffers.push(buffer)
-        })
-        .on('end', function () {
-          var responseBody = Buffer.concat(buffers).toString()
-          if (status === 200) {
-            parse(responseBody, function (error, form) {
-              if (error) {
-                callback(error)
-              } else {
-                callback(null, form)
-              }
-            })
-          } else {
-            var error = new Error(responseBody)
-            error.statusCode = status
-            callback(error)
-          }
-        })
+        if (statusCode === 200) {
+          concat(response, function (error, buffer) {
+            if (error) return callback(error)
+            parse(buffer, callback)
+          })
+        } else {
+          var error = new Error()
+          error.statusCode = statusCode
+          callback(error)
+        }
       }
     }
   )
