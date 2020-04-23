@@ -3,11 +3,15 @@ var https = require('https')
 var once = require('once')
 var parse = require('json-parse-errback')
 
-module.exports = function (repository, digest, callback) {
+module.exports = function (repository, publisher, project, edition, callback) {
   callback = once(callback)
   https.request({
     host: repository,
-    path: '/forms/' + digest
+    path: (
+      '/' + encodeURIComponent(publisher) +
+      '/' + encodeURIComponent(project) +
+      '/' + encodeURIComponent(edition) + '.json'
+    )
   })
     .once('error', callback)
     .once('timeout', callback)
@@ -21,7 +25,10 @@ module.exports = function (repository, digest, callback) {
       }
       concat(response, function (error, buffer) {
         if (error) return callback(error)
-        parse(buffer, callback)
+        parse(buffer, function (error, result) {
+          if (error) return callback(error)
+          callback(null, result.form)
+        })
       })
     })
     .end()
